@@ -25,4 +25,4 @@ webform:
 
 launch:
   type: binary
-  command: naabu -p 0-65535 -ep 25 -sa -csv -o outputs/scan_output.csv ${host_to_scan}
+  command: /go/bin/naabu -p 0-65535 -ep 25 -sa -csv -o outputs/scan_output.csv -host ${host_to_scan}
