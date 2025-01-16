@@ -6,16 +6,7 @@ runner:
 build:
   commands: |
     echo "START: Building the runner"
-    apt install -y build-essential
-    apt install -y libpcap-dev
-    wget https://go.dev/dl/go1.21.6.linux-amd64.tar.gz && tar -C /usr/local -xzf go1.21.6.linux-amd64.tar.gz && rm go1.21.6.linux-amd64.tar.gz
-    ENV GOROOT=/usr/local/go
-    ENV GOPATH=/go
-    ENV PATH=$GOPATH/bin:$GOROOT/bin:$PATH
-    ENV CGO_ENABLED=1
-    mkdir -p /go/src
-    mkdir -p /go/bin
-    go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
+    apt install -y nmap
     echo "END: Building the runner"
 
 webform:
@@ -25,4 +16,4 @@ webform:
 
 launch:
   type: binary
-  command: /go/bin/naabu -p 0-65535 -ep 25 -sa -csv -o outputs/scan_output.csv -host ${host_to_scan}
+  command: /usr/bin/nmap -T4 -Pn -n -sT -p 0-65535 --reason -oA outputs/ ${host_to_scan}
