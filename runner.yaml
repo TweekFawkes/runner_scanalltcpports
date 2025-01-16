@@ -1,0 +1,28 @@
+runner:
+  name: What TCP Ports Are Open?
+  description: Scan a target and return a list of open TCP ports. Trys TCP Ports 0 thru 65535 (-p 0-65535 -ep 25 -csv -sa).
+  version: 0.0.1
+
+build:
+  commands: |
+    echo "START: Building the runner"
+    apt install -y build-essential
+    apt install -y libpcap-dev
+    wget https://go.dev/dl/go1.21.6.linux-amd64.tar.gz && tar -C /usr/local -xzf go1.21.6.linux-amd64.tar.gz && rm go1.21.6.linux-amd64.tar.gz
+    ENV GOROOT=/usr/local/go
+    ENV GOPATH=/go
+    ENV PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+    ENV CGO_ENABLED=1
+    mkdir -p /go/src
+    mkdir -p /go/bin
+    go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
+    echo "END: Building the runner"
+
+webform:
+  - name: host_to_scan
+    prompt: Host
+    type: text
+
+launch:
+  type: binary
+  command: naabu -p 0-65535 -ep 25 -sa -csv -o outputs/scan_output.csv ${host_to_scan}
